@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="leaflet.css" />
+    <script src="leaflet.js"></script>
+    <script src="markers.js"></script>
+    <script>
+        function init() {
+            //floor maps
+            var floor1Layer = L.tileLayer('floor1/{z}/{x}/{y}.png', { minZoom: mapMinZoom, maxZoom: mapMaxZoom, bounds: mapBounds, attribution: '', noWrap: true, tms: false }),
+                floor2Layer = L.tileLayer('floor2/{z}/{x}/{y}.png', { minZoom: mapMinZoom, maxZoom: mapMaxZoom, bounds: mapBounds, attribution: '', noWrap: true, tms: false }),
+                floor3Layer = L.tileLayer('floor3/{z}/{x}/{y}.png', { minZoom: mapMinZoom, maxZoom: mapMaxZoom, bounds: mapBounds, attribution: '', noWrap: true, tms: false }),
+                floor4Layer = L.tileLayer('floor4/{z}/{x}/{y}.png', { minZoom: mapMinZoom, maxZoom: mapMaxZoom, bounds: mapBounds, attribution: '', noWrap: true, tms: false }),
+                floor5Layer = L.tileLayer('floor5/{z}/{x}/{y}.png', { minZoom: mapMinZoom, maxZoom: mapMaxZoom, bounds: mapBounds, attribution: '', noWrap: true, tms: false });
+
+            var floor1LayerGroup = L.layerGroup([floor1Layer, floor1Marker1, floor1Marker2, floor1Marker3, floor1Marker4]),
+                floor2LayerGroup = L.layerGroup([floor2Layer, floor2Marker1, floor2Marker2]),
+                floor3LayerGroup = L.layerGroup([floor3Layer, floor3Marker1, floor3Marker2]),
+                floor4LayerGroup = L.layerGroup([floor4Layer, floor4Marker1, floor4Marker2]),
+                floor5LayerGroup = L.layerGroup([floor5Layer, floor5Marker1, floor5Marker2]);
+            //floor radio buttons
+            var baseMaps = {
+                "1": floor1LayerGroup,
+                "2": floor2LayerGroup,
+                "3": floor3LayerGroup,
+                "4": floor4LayerGroup,
+                "5": floor5LayerGroup
+            };
+
+
+            //zoom levels
+            var mapMinZoom = 2;
+            var mapMaxZoom = 5;
+
+            //create map
+            var map = L.map('map', {
+                maxZoom: mapMaxZoom,
+                minZoom: mapMinZoom,
+                crs: L.CRS.Simple,
+                layers: floor1LayerGroup
+            }).setView([0, 0], mapMaxZoom);
+            //map bounds
+            var mapBounds = new L.LatLngBounds(
+              map.unproject([0, 3072], mapMaxZoom),
+              map.unproject([6144, 0], mapMaxZoom));
+            //add bounds to map
+            map.fitBounds(mapBounds);
+            //Add controls (radio buttons) to map in order to switch between floors
+            L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map).setPosition('bottomright');
+
+            //L.rectangle(mapBounds, { color: "#ff7800", weight: 1 }).addTo(map);
+
+        }
+    </script>
+    <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <div id="map"></div>
+</body>
+</html>
