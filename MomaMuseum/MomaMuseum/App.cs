@@ -12,7 +12,7 @@ namespace MomaMuseum
         public App()
         {
             // The root page of your application
-            MainPage = new MomaMuseum.MainPage();
+            MainPage = new MomaMuseum.MainMoma();
             /*MainPage = new ContentPage
             {
                 Content = new StackLayout
